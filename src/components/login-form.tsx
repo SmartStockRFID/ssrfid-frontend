@@ -60,11 +60,16 @@ export function LoginForm({
     if (isSubmitting) {
       return;
     }
-    const result = await loginAction(values);
-    setError(!result.success);
-    setApiMessage(result.message);
+    try {
+      const result = await loginAction(values);
+      setError(!result.success);
+      setApiMessage(result.message);
 
-    router.replace(AppRoutes.dashboard);
+      router.replace(AppRoutes.dashboard);
+    } catch {
+      setError(true);
+      setApiMessage("Erro na comunicação com o servidor");
+    }
   }
 
   return (
@@ -113,9 +118,11 @@ export function LoginForm({
                   type="submit"
                   disabled={isSubmitting || (!error && !!apiMessage)}
                 >
-                  {isSubmitting ? "Entrando..." : "Entrar"}
+                  <span className={cn(Typography.p)}>
+                    {isSubmitting ? "Entrando..." : "Entrar"}
+                  </span>
                 </Button>
-                <div className="text-center text-sm text-muted-foreground">
+                <div className="text-center text-sm text-muted-foreground dark:text-gray-200">
                   Não tem uma conta?
                   <p>
                     Por favor, entre em{" "}

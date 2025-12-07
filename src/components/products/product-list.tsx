@@ -30,10 +30,10 @@ export function ProductList({ products }: { products: Product[] }) {
             <Package2 className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h2 className="text-2xl font-semibold text-gray-900">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-50">
               Produtos <span className="hidden sm:inline">Cadastrados</span>
             </h2>
-            <p className="text-gray-600 hidden sm:block">
+            <p className="text-gray-600 dark:text-gray-200 hidden sm:block">
               Lista de produtos no inventário RFID
             </p>
           </div>

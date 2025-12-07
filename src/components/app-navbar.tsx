@@ -1,14 +1,23 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { LogOut, Origami, UserCircle2 } from "lucide-react";
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { logoutAction } from "@/api/mutations";
-import { AppRoutes, Assets } from "@/constants";
+import { AppRoutes, Assets, newlandTheme } from "@/constants";
 import { cn } from "@/utils";
-import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { ThemeToggleButton } from "./ui/theme-toggle-button";
 import { Typography } from "./ui/typography";
 
 interface LinksDefinition {
@@ -36,22 +45,27 @@ export function AppNavbar() {
 
   const router = useRouter();
 
-  async function onLogout() {
-    await logoutAction();
-    router.push(AppRoutes.login);
-  }
-
   return (
-    <header className="bg-[#b91c1c] text-white">
+    <header
+      className={cn(
+        "text-white",
+        newlandTheme ? "bg-[#b91c1c]" : "bg-slate-600",
+      )}
+    >
       <nav className="flex items-center justify-between w-full px-6 py-2 mx-auto max-w-7xl 3xl:px-0">
         <Link href={"/"} className="flex items-center gap-3">
-          <Image
-            className="invert"
-            src={Assets.icons.toyota}
-            alt="Toyota logomarca"
-            width={40}
-            height={40}
-          />
+          {newlandTheme ? (
+            <Image
+              className="invert"
+              src={Assets.icons.toyota}
+              alt="Toyota logomarca"
+              width={40}
+              height={40}
+            />
+          ) : (
+            <Origami />
+          )}
+
           <h1 className={cn(Typography.h1, "text-lg hidden sm:block")}>
             <span className="hidden sm:inline">Sistema </span>SSRFID
           </h1>
@@ -92,10 +106,33 @@ export function AppNavbar() {
             : links.dashboard.label}
         </Link>
 
-        <Button onClick={onLogout}>
-          <span className="hidden sm:inline">Sair</span>
-          <LogOut />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="cursor-pointer bg-gray-600 rounded-full flex items-center justify-center h-fit w-fit">
+            <UserCircle2 className="w-8 h-8 text-white" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="*:cursor-pointer">
+            <ThemeToggleButton />
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() =>
+                toast.promise(
+                  async function onLogout() {
+                    await logoutAction();
+                    router.push(AppRoutes.login);
+                  },
+                  {
+                    loading: "Encerrando sessão...",
+                  },
+                )
+              }
+            >
+              Deslogar
+              <DropdownMenuShortcut>
+                <LogOut />
+              </DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </nav>
     </header>
   );

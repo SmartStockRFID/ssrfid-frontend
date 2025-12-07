@@ -1,12 +1,26 @@
 {
-  "editor.tabSize": 2,
+  // Auto fix with ESLint on save
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports": "explicit",
+    "source.fixAll.biome": "always",
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.ts": "always",
+    "source.organizeImports.biome": "always",
+    "source.sort.json": "always"
+  },
   "editor.detectIndentation": false,
+  "editor.formatOnSave": false,
+  "editor.tabSize": 2,
+  "i18n-ally.keystyle": "nested",
+  // I18n
+  "i18n-ally.localesPaths": ["src/locales"],
+  // Disable the default formatter, use ESLint instead
+  "prettier.enable": false,
   "search.exclude": {
     "package-lock.json": true
   },
-
-  // TypeScript
-  "typescript.tsdk": "node_modules/typescript/lib", // Use the workspace version of TypeScript
+  // Vitest
+  "testing.automaticallyOpenTestResults": "neverOpen", // Don't open the test results automatically
   "typescript.enablePromptUseWorkspaceTsdk": true, // For security reasons it's require that users opt into using the workspace version of typescript
   "typescript.preferences.autoImportSpecifierExcludeRegexes": [
     // useRouter should be imported from `next/navigation` instead of `next/router`
@@ -20,22 +34,6 @@
     // Sentry is imported with `import *`
     "@sentry/nextjs"
   ],
-
-  // Vitest
-  "testing.automaticallyOpenTestResults": "neverOpen", // Don't open the test results automatically
-
-  // I18n
-  "i18n-ally.localesPaths": ["src/locales"],
-  "i18n-ally.keystyle": "nested",
-
-  // Disable the default formatter, use ESLint instead
-  "prettier.enable": false,
-  "editor.formatOnSave": false,
-
-  // Auto fix with ESLint on save
-  "editor.codeActionsOnSave": {
-    "source.addMissingImports": "explicit",
-    "source.organizeImports.biome": "explicit",
-    "source.fixAll.eslint": "explicit"
-  }
+  // TypeScript
+  "typescript.tsdk": "node_modules/typescript/lib" // Use the workspace version of TypeScript
 }

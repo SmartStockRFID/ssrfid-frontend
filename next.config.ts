@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@t3-oss/env-nextjs"],
   reactCompiler: true,
   typedRoutes: true,
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+  },
 };
 
 export default nextConfig;

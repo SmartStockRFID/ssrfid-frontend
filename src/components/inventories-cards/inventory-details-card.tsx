@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Activity,
-  AlertCircleIcon,
-  Loader,
-  PackageSearch,
-  Tag,
-} from "lucide-react";
+import { AlertCircleIcon, Loader, PackageSearch, Tag } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import {
   type InventoryDetails,
@@ -177,7 +171,7 @@ function InventoryDetailsContent(props: Omit<Props, "className">) {
                   .
                 </AlertTitle>
               </Alert>
-              <Alert>
+              {/* <Alert>
                 <Activity />
                 <AlertTitle>
                   {props.inventoryDetails.events.length === 0 && "Nenhum"}
@@ -187,7 +181,7 @@ function InventoryDetailsContent(props: Omit<Props, "className">) {
                   registrado{props.inventoryDetails.events.length > 1 && "s"} no
                   inventário.
                 </AlertTitle>
-              </Alert>
+              </Alert> */}
             </div>
           )}
         </div>

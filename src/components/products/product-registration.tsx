@@ -79,10 +79,10 @@ export function ProductRegistration({ className }: ClassNameProp) {
     <div className={cn(className, "space-y-6")}>
       <DialogHeader className="flex items-center space-x-3">
         <div>
-          <DialogTitle className="text-2xl font-semibold text-gray-900">
+          <DialogTitle className="text-2xl font-semibold text-gray-900 dark:text-gray-50">
             Cadastrar Novo Produto
           </DialogTitle>
-          <DialogDescription className="text-gray-600">
+          <DialogDescription className="text-gray-600 dark:text-gray-200">
             Preencha as informações do produto para adicionar ao sistema
           </DialogDescription>
         </div>

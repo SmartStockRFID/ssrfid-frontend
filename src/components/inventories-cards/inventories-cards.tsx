@@ -24,13 +24,13 @@ export function InventoriesCards({ inventories }: Props) {
   return (
     <>
       <InventoriesListCard
-        className="w-full sm:w-1/2"
+        className="w-full md:w-1/2"
         inventories={inventories}
         selectedInventory={selectedInventory}
         setSelectedInventory={setSelectedInventory}
       />
       <InventoryDetailsCard
-        className="hidden sm:flex sm:w-1/2"
+        className="hidden md:flex md:w-1/2"
         hasInventories={inventories.length > 0}
         selectedInventory={selectedInventory}
         setSelectedInventory={setSelectedInventory}
