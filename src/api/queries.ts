@@ -9,11 +9,11 @@ import type {
   InventorySummary,
   Product,
 } from "@/types";
-import { fetchWithAuth } from "./fetch-with-auth";
+import { apiClient } from "./api-client";
 
 export async function getProducts(): Promise<Product[] | ApplicationException> {
   const endpoint = "/pecas/";
-  const res = await fetchWithAuth(endpoint);
+  const res = await apiClient(endpoint);
 
   if (!(res instanceof Response)) {
     return res;
@@ -38,7 +38,7 @@ export async function getInventories(): Promise<
   InventorySummary[] | ApplicationException
 > {
   const endpoint = "/conferencia/";
-  const res = await fetchWithAuth(endpoint);
+  const res = await apiClient(endpoint);
 
   if (!(res instanceof Response)) {
     return res;
@@ -61,7 +61,7 @@ export async function getInventoryDetails(
   id: number,
 ): Promise<InventoryDetails | ApplicationException> {
   const endpoint = `/conferencia/${id}`;
-  const res = await fetchWithAuth(endpoint);
+  const res = await apiClient(endpoint);
 
   if (!(res instanceof Response)) {
     return res;

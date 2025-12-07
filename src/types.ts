@@ -99,7 +99,9 @@ export interface LoginRequestDTO {
 
 export interface LoginResponseDTO {
   access_token: string;
-  token_type: string;
+  refresh_token: string;
+  access_expire: string;
+  refresh_expire: string;
 }
 
 export interface CreateUserResponseDTO {

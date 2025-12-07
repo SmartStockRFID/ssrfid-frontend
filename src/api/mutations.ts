@@ -4,6 +4,9 @@ import { DEFAULT_HEADERS } from "@/constants";
 import { env } from "@/env/server";
 import type { APIErrorDTO, LoginRequestDTO, LoginResponseDTO } from "@/types";
 import { AuthCookies } from "./cookies";
+import { ApiEndpoints } from "./endpoints";
+
+const BACKEND_URL = env.INTERNAL_SSRFID_API_URL;
 
 export async function loginAction(
   credentials: LoginRequestDTO,
@@ -30,11 +33,65 @@ export async function loginAction(
 
   const body: LoginResponseDTO = await res.json();
 
-  await AuthCookies.setToken(body);
+  await AuthCookies.setTokens(body);
 
   return { message: "Logado com sucesso! Redirecionando...", success: true };
 }
 
 export async function logoutAction() {
-  await AuthCookies.deleteToken();
+  await AuthCookies.deleteTokens();
+}
+
+interface RefreshReturn {
+  success: boolean;
+  token: string | null;
+}
+
+let refreshPromise: Promise<RefreshReturn> | null = null;
+
+/**
+ * Faz refresh dos tokens de forma thread-safe
+ * Evita m�ltiplas chamadas simult�neas de refresh
+ */
+export async function refreshTokenAction(): Promise<RefreshReturn> {
+  if (refreshPromise) return refreshPromise;
+
+  async function doRefresh() {
+    const { refresh: refreshToken } = await AuthCookies.getTokens();
+
+    if (!refreshToken) {
+      await AuthCookies.deleteTokens();
+      return { success: false, token: null };
+    }
+
+    try {
+      const endpoint = ApiEndpoints.auth.refresh();
+
+      const res = await fetch(BACKEND_URL + endpoint.url, {
+        method: endpoint.method,
+        body: JSON.stringify({ refresh_token: refreshToken }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!res.ok) {
+        await AuthCookies.deleteTokens();
+        return { success: false, token: null };
+      }
+
+      const tokens: LoginResponseDTO = await res.json();
+      await AuthCookies.setTokens(tokens);
+      return { success: true, token: tokens.access_token };
+    } catch (err) {
+      console.info("Error refreshing access token! ", err);
+      return { success: false, token: null };
+    } finally {
+      setTimeout(() => {
+        refreshPromise = null;
+      }, 500);
+    }
+  }
+
+  refreshPromise = doRefresh();
+
+  return refreshPromise;
 }
