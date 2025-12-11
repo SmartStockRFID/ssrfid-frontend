@@ -1,10 +1,7 @@
-import { getProducts } from "@/api/queries";
-import { ProductsPage } from "@/components/pages/products-page";
+import ProductsPage from "@/components/pages/products-page";
 
-const Products = async () => {
-  const products = await getProducts();
-
-  return <ProductsPage products={products} />;
+const Products = () => {
+  return <ProductsPage />;
 };
 
 export default Products;

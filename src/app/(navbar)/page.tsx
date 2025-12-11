@@ -1,15 +1,7 @@
-import { getInventories, getProducts } from "@/api/queries";
-import { HomePage } from "@/components/pages/home-page";
-import { employeesFixture } from "@/fixtures";
+import HomePage from "@/components/pages/home-page";
 
-const Home = async () => {
-  const [products, inventories] = await Promise.all([
-    getProducts(),
-    getInventories(),
-  ]);
-  return (
-    <HomePage products={products} inventories={inventories} employees={employeesFixture} />
-  );
+const Home = () => {
+  return <HomePage />;
 };
 
 export default Home;

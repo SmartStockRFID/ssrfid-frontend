@@ -1,25 +1,23 @@
-import type { Product } from "@/types";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+"use client";
 
-interface PageProps {
-  products: Product[];
-}
+import { getProducts } from "@/api/queries";
+import { ProductList } from "@/components/products/product-list";
+import { useFetchData } from "@/hooks/use-fetch-data";
+import { RequestStatus } from "@/types";
+import { ErrorWidget, LoadingWidget } from "./_components";
 
-export function ProductsPage(props: PageProps) {
+export default function ProductsPage() {
+  const productsReq = useFetchData(getProducts);
+
   return (
-    <main className="flex flex-col items-center pt-8">
-      <Card className="w-1/3">
-        <CardHeader>
-          <CardTitle className="text-center">Produtos</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul>
-            {props.products.map((p) => (
-              <li key={p.id}>{p.nome}</li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+    <main className="max-w-6xl px-2.5 sm:px-6 py-8 mx-auto">
+      <div className="md:p-8 md:border rounded-lg bg-card sm:border-border">
+        {productsReq.status === RequestStatus.SUCCESS && (
+          <ProductList products={productsReq.data ?? []} />
+        )}
+        {productsReq.status === RequestStatus.PENDING && <LoadingWidget />}
+        {productsReq.status === RequestStatus.ERROR && <ErrorWidget />}
+      </div>
     </main>
   );
 }

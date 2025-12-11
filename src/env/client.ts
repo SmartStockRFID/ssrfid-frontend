@@ -1,13 +1,13 @@
 import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import z from "zod";
 
 export const env = createEnv({
   server: {},
   client: {
-    NEXT_PUBLIC_SSRFID_API_URL: z.url(),
+    NEXT_PUBLIC_THEME_MODE: z.enum(["app", "newland"]).default("app"),
   },
   // For Next.js >= 13.4.4, you only need to destructure client variables:
   experimental__runtimeEnv: {
-    NEXT_PUBLIC_SSRFID_API_URL: process.env.NEXT_PUBLIC_SSRFID_API_URL,
+    NEXT_PUBLIC_THEME_MODE: process.env.NEXT_PUBLIC_THEME_MODE,
   },
 });

@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+  # SmartStock RFID - Web
+  ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-## Getting Started
+  Módulo frontend feito em Next.js para gestão de inventário integrado ao projeto SSRFID.
 
-First, run the development server:
+  ## ✨ Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+  O front oferece acesso às seguintes funcionalidades:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  - **Histórico de Conferências (Parcialmente implementada)**: Visualize um histórico detalhado de todas as conferências de inventário realizadas, incluindo leituras de produtos e eventos associados.
+  - **CRUD de Produtos (Temporária\*)**: Adicione novos produtos ao inventário, especificando nome, código, descrição e localização, e depois consulte e filtre a lista de produtos já cadastrados no sistema.
+  - **Gestão de Usuários (Futura)**: Registre novos usuários no sistema e os gerencie, atribuindo diferentes funções como Administrador ou Operador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+  *Devido ao seu caráter temporário, essa funcionalidade foi codificada com auxílio de ferramentas _low-code_. Os arquivos feitos assim podem ser diferenciados pelo comentário "low-code" em seu topo.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+  ## 🚀 Tecnologias Utilizadas
 
-## Learn More
+  Este projeto foi construído com as seguintes tecnologias:
 
-To learn more about Next.js, take a look at the following resources:
+  - **Linguagem**: [TypeScript 5](https://www.typescriptlang.org/)
+  - **Framework**: [Next.js 16](https://nextjs.org/) (com App Router)
+  - **Estilização**: [Tailwind CSS 4](https://tailwindcss.com/),  [shadcn/ui](https://ui.shadcn.com/) e [Lucide](https://lucide.dev/).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  ## ⚙️ Instalação e uso
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+  ### Pré-requisitos
 
-## Deploy on Vercel
+  Antes de começar, você precisará ter instalado:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  * [Node.js](https://nodejs.org/) (versão 20.9 ou superior)
+  * [pnpm](https://pnpm.io/) (gerenciador de pacotes recomendado)
+
+
+  ### Instalação
+
+
+
+  1.  Clone o repositório:
+      ```bash
+      git clone {repositório do ssrfid-front}
+      cd ssrfid-front
+      ```
+
+  2.  Instale as dependências:
+      ```bash
+      pnpm install
+      ```
+
+  3.  Crie um arquivo .env com base no .env.example e adicione as configurações necessárias:
+      ```bash
+      cp .env.example .env
+      ```
+
+  ### Executando o Servidor de Desenvolvimento
+
+  Para iniciar a aplicação em modo de desenvolvimento, execute:
+
+  ```bash
+  pnpm dev
+  ```
+
+
+
+  Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado. A página será atualizada automaticamente conforme você edita os arquivos.
+
+
+
+  ## 📁 Estrutura do Projeto
+
+  A estrutura de pastas do projeto segue as convenções do Next.js App Router:
+
+  ```
+  src/
+  ├── api/                    # Lógica de comunicação com a API
+  │   ├── app/                # Páginas e Layouts
+  ├── components/             # Componentes React reutilizáveis
+  │   ├── ui                  # Componentes base (shadcn/ui)
+  ├── constants.ts            # Configurações da aplicação
+  ├── env/                    # Configuração e validação de variáveis de ambiente
+  ├── hooks/                  # Hooks customizados
+  ├── types.ts                # Definições de tipos TypeScript
+  └── utils.ts                # Funções utilitárias
+  ```
+
+  ## ✅ Todo
+
+  As seguintes funcionalidades ainda precisam ser implementadas:
+
+  - Visualização dos detalhes do Inventário em formato de Drawer no mobile
+  - Em detalhes do Inventário, adicionar lista de produtos e eventos associados a ele
+  - Paginação na listagem de Inventários
+  - Dockerizar aplicação
+  - Adicionar relatórios dos Inventários em CSV/PDF
+  - Adicionar gráficos com informações sobre os Inventários em sua listagem
+  - Alterar o back pra retornar a data/hora do inventario no GetAll _(em caso de demora)_
+  - CRUD de funcionários _(aguardando backend)_
+  - Melhorar experiência mobile e completar CRUD no módulo de Produtos _(baixa prioridade)_
+  - Adicionar uma cobertura mínima de testes _(desejável)_
+
+
+## 👀 OBS:
+
+- Onde você ver object instanceof Error, deveria ser object instanceof ApplicationException (para pegar os tipos ExternalAPIException e NetworkFetchException), mas por algum motivo retorna false sempre.

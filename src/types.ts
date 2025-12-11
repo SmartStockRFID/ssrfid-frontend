@@ -1,7 +1,28 @@
+export interface APIErrorDTO {
+  detail: string;
+}
+
+export enum RequestStatus {
+  IDLE,
+  PENDING,
+  ERROR,
+  SUCCESS,
+}
+
+/* --------------------------------- PRODUCT -------------------------------- */
+
 export interface Product {
   id: number;
+  name: string;
+  productCode: string;
+  description: string;
+  location: string;
+}
+
+export interface GetProductDTO {
+  id: number;
   nome: string;
-  codigoProduto: string;
+  codigo_produto: string;
   descricao: string;
   localizacao: string;
 }
@@ -15,17 +36,9 @@ export interface CreateProductDTO {
 
 export interface UpdateProductDTO extends CreateProductDTO {}
 
-export interface GetProductDTO {
-  id: number;
-  nome: string;
-  codigo_produto: string;
-  descricao: string;
-  localizacao: string;
-}
-
 /* -------------------------------- INVENTORY ------------------------------- */
 
-type InventoryStatus = "iniciada" | "finalizada" | "cancelada";
+export type InventoryStatus = "iniciada" | "finalizada" | "cancelada";
 
 export interface InventorySummary {
   id: number;
@@ -39,29 +52,42 @@ export interface GetAllInventoryDTO {
   username_funcionario: string;
 }
 
-interface ReadingDTO {
+export interface InventoryReading {
+  id: number;
+  productCode: string;
+  lastReadTimestamp: Date;
+  quantity: number;
+}
+
+export interface ReadingDTO {
   id: number;
   codigo_produto: string;
   ultima_leitura: string;
   quantidade: number;
 }
 
-interface EventDTO {
-  id: number;
-  tipo: string;
-  descricao: string;
-  ocorreu_em: string;
+/* ---------------------------------- AUTH ---------------------------------- */
+
+export interface LoginRequestDTO {
+  username: string;
+  password: string;
 }
 
-export interface GetByIdInventoryDTO {
+export interface LoginResponseDTO {
+  access_token: string;
+  refresh_token: string;
+  access_expire: string;
+  refresh_expire: string;
+}
+
+export interface CreateUserResponseDTO {
   id: number;
-  status: InventoryStatus;
-  username_funcionario: string;
-  leituras: ReadingDTO[];
-  eventos: EventDTO[];
+  username: string;
+  role: string;
 }
 
 export interface Employee {
+  id: number;
   username: string;
   role: string;
 }
