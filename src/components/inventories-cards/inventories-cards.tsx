@@ -1,6 +1,6 @@
 "use client";
 
-import { useFetchInventoryDetails } from "@/hooks/use-fetch-inventory-details";
+import { useFetchInventoryReadings } from "@/hooks/use-fetch-inventory-readings";
 import type { InventoryStatus, InventorySummary } from "@/types";
 import { cn } from "@/utils";
 import { Badge } from "../ui/badge";
@@ -17,9 +17,10 @@ export function InventoriesCards({ inventories }: Props) {
   const {
     selectedInventory,
     setSelectedInventory,
-    inventoryDetails,
+    inventoryReadings: inventoryDetails,
     requestStatus,
-  } = useFetchInventoryDetails();
+    fetchedInventoryId,
+  } = useFetchInventoryReadings();
 
   return (
     <>
@@ -30,11 +31,12 @@ export function InventoriesCards({ inventories }: Props) {
         setSelectedInventory={setSelectedInventory}
       />
       <InventoryDetailsCard
+        fetchedInventoryId={fetchedInventoryId}
         className="hidden md:flex md:w-1/2"
         hasInventories={inventories.length > 0}
         selectedInventory={selectedInventory}
         setSelectedInventory={setSelectedInventory}
-        inventoryDetails={inventoryDetails}
+        inventoryReadings={inventoryDetails}
         fetchDetailsReqStatus={requestStatus}
       />
     </>

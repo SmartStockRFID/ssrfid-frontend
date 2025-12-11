@@ -52,42 +52,18 @@ export interface GetAllInventoryDTO {
   username_funcionario: string;
 }
 
-export interface InventoryDetails extends InventorySummary {
-  readings: Reading[];
-  events: Event[];
-}
-
-export interface GetByIdInventoryDTO extends GetAllInventoryDTO {
-  leituras: ReadingDTO[];
-  eventos: EventDTO[];
-}
-
-interface Reading {
+export interface InventoryReading {
   id: number;
   productCode: string;
   lastReadTimestamp: Date;
   quantity: number;
 }
 
-interface ReadingDTO {
+export interface ReadingDTO {
   id: number;
   codigo_produto: string;
   ultima_leitura: string;
   quantidade: number;
-}
-
-interface Event {
-  id: number;
-  type: string;
-  description: string;
-  occurredAt: Date;
-}
-
-interface EventDTO {
-  id: number;
-  tipo: string;
-  descricao: string;
-  ocorreu_em: string;
 }
 
 /* ---------------------------------- AUTH ---------------------------------- */
@@ -111,6 +87,7 @@ export interface CreateUserResponseDTO {
 }
 
 export interface Employee {
+  id: number;
   username: string;
   role: string;
 }

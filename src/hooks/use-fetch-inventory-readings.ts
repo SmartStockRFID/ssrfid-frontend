@@ -1,24 +1,28 @@
 import { useEffect, useRef, useState } from "react";
-import { getInventoryDetails } from "@/api/queries";
+import { getInventoryReadings } from "@/api/queries";
 import {
-  type InventoryDetails,
+  type InventoryReading,
   type InventorySummary,
   RequestStatus,
 } from "@/types";
 
-interface UseDetailsReturn {
+interface UseReadingsReturn {
   selectedInventory: InventorySummary | null;
-  inventoryDetails: InventoryDetails | null;
   setSelectedInventory: (inventory: InventorySummary | null) => void;
+  inventoryReadings: InventoryReading[] | null;
+  fetchedInventoryId: number;
   requestStatus: RequestStatus;
 }
 
-export function useFetchInventoryDetails(): UseDetailsReturn {
+export function useFetchInventoryReadings(): UseReadingsReturn {
   const [selectedInventory, setSelectedInventory] =
     useState<InventorySummary | null>(null);
 
-  const [inventoryDetails, setInventoryDetails] =
-    useState<InventoryDetails | null>(null);
+  const [currentFetchedId, setFetchedId] = useState(-1);
+
+  const [inventoryReadings, setInventoryReadings] = useState<
+    InventoryReading[] | null
+  >(null);
 
   const [requestStatus, setRequestStatus] = useState<RequestStatus>(
     RequestStatus.IDLE,
@@ -42,21 +46,18 @@ export function useFetchInventoryDetails(): UseDetailsReturn {
 
       setRequestStatus(RequestStatus.PENDING);
 
-      const data = await getInventoryDetails(targetId);
+      const data = await getInventoryReadings(targetId);
 
       if (fetchInfo.current.inventoryId !== targetId) {
         return;
       }
 
       if (data instanceof Error) {
-        console.log(data);
-        console.log("REQUISICAO DEU ERRO");
-
-        setInventoryDetails(null);
+        setInventoryReadings(null);
         setRequestStatus(RequestStatus.ERROR);
       } else {
-        console.log("REQUISICAO BEM SUCEDIDA");
-        setInventoryDetails(data);
+        setFetchedId(targetId);
+        setInventoryReadings(data);
         setRequestStatus(RequestStatus.IDLE);
       }
 
@@ -67,27 +68,27 @@ export function useFetchInventoryDetails(): UseDetailsReturn {
       fetchInfo.current = { inventoryId: null, isFetching: false };
     }
 
-    // console.debug("INVENTÁRIO SELECIONADO: ", selectedInventory?.id);
+    console.debug("INVENTÁRIO SELECIONADO: ", selectedInventory?.id);
 
     if (selectedInventory === null) {
-      // console.debug(
-      //   "NENHUM INVENTÁRIO SELECIONADO: { abort? NAO. initFetch? NAO }",
-      // );
+      console.debug(
+        "NENHUM INVENTÁRIO SELECIONADO: { abort? NAO. initFetch? NAO }",
+      );
       return;
-    } else if (selectedInventory.id === inventoryDetails?.id) {
-      // console.debug("DADOS JA SALVOS EM MEMORIA: { abort? SIM. initFech? NAO}");
+    } else if (selectedInventory.id === currentFetchedId) {
+      console.debug("DADOS JA SALVOS EM MEMORIA: { abort? SIM. initFech? NAO}");
       abortFetch();
       return;
     } else if (
       fetchInfo.current.isFetching &&
       fetchInfo.current.inventoryId === selectedInventory.id
     ) {
-      // console.debug(
-      //   "BUSCANDO O INVENTARIO ATUAL: { abort? NAO. initFetch? NAO }",
-      // );
+      console.debug(
+        "BUSCANDO O INVENTARIO ATUAL: { abort? NAO. initFetch? NAO }",
+      );
       return;
     } else {
-      // console.debug("BUSCANDO OUTRO INVENTARIO: abort? SIM. initFetch? SIM");
+      console.debug("BUSCANDO OUTRO INVENTARIO: abort? SIM. initFetch? SIM");
       abortFetch();
       attemptFetch(selectedInventory.id);
     }
@@ -96,8 +97,8 @@ export function useFetchInventoryDetails(): UseDetailsReturn {
   return {
     selectedInventory,
     setSelectedInventory,
-
-    inventoryDetails,
+    fetchedInventoryId: currentFetchedId,
+    inventoryReadings: inventoryReadings,
     requestStatus,
   };
 }

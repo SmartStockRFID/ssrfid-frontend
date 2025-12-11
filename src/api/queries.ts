@@ -2,12 +2,13 @@
 
 import type { ApplicationException } from "@/exceptions";
 import type {
+  Employee,
   GetAllInventoryDTO,
-  GetByIdInventoryDTO,
   GetProductDTO,
-  InventoryDetails,
+  InventoryReading,
   InventorySummary,
   Product,
+  ReadingDTO,
 } from "@/types";
 import { apiClient } from "./api-client";
 
@@ -37,7 +38,7 @@ export async function getProducts(): Promise<Product[] | ApplicationException> {
 export async function getInventories(): Promise<
   InventorySummary[] | ApplicationException
 > {
-  const endpoint = "/conferencia/";
+  const endpoint = "/conferencia";
   const res = await apiClient(endpoint);
 
   if (!(res instanceof Response)) {
@@ -57,35 +58,41 @@ export async function getInventories(): Promise<
   return body.map(parse).toReversed();
 }
 
-export async function getInventoryDetails(
+export async function getInventoryReadings(
   id: number,
-): Promise<InventoryDetails | ApplicationException> {
-  const endpoint = `/conferencia/${id}`;
+): Promise<InventoryReading[] | ApplicationException> {
+  const endpoint = `/conferencia/${id}/leituras?limit=50&offset=0`;
   const res = await apiClient(endpoint);
 
   if (!(res instanceof Response)) {
     return res;
   }
 
-  const body: GetByIdInventoryDTO = await res.json();
+  const body: { items: ReadingDTO[] } = await res.json();
 
-  const parsed: InventoryDetails = {
-    id: body.id,
-    status: body.status,
-    employeeUsername: body.username_funcionario,
-    events: body.eventos.map((event) => ({
-      id: event.id,
-      description: event.descricao,
-      occurredAt: new Date(event.ocorreu_em),
-      type: event.tipo,
-    })),
-    readings: body.leituras.map((reading) => ({
-      id: reading.id,
-      productCode: reading.codigo_produto,
-      quantity: reading.quantidade,
-      lastReadTimestamp: new Date(reading.ultima_leitura),
-    })),
-  };
+  const parse = (read: ReadingDTO): InventoryReading => ({
+    id: read.id,
+    lastReadTimestamp: new Date(read.ultima_leitura),
+    productCode: read.codigo_produto,
+    quantity: read.quantidade,
+  });
 
-  return parsed;
+  console.log(body);
+
+  return body.items.map(parse);
+}
+
+export async function getEmployees(): Promise<
+  Employee[] | ApplicationException
+> {
+  const endpoint = "/usuarios";
+  const res = await apiClient(endpoint);
+
+  if (!(res instanceof Response)) {
+    return res;
+  }
+
+  const body: Employee[] = await res.json();
+
+  return body.toReversed();
 }

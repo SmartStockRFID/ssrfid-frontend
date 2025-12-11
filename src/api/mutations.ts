@@ -2,7 +2,15 @@
 
 import { DEFAULT_HEADERS } from "@/constants";
 import { env } from "@/env/server";
-import type { APIErrorDTO, LoginRequestDTO, LoginResponseDTO } from "@/types";
+import type { ApplicationException } from "@/exceptions";
+import type {
+  APIErrorDTO,
+  CreateEmployeeDTO,
+  Employee,
+  LoginRequestDTO,
+  LoginResponseDTO,
+} from "@/types";
+import { apiClient } from "./api-client";
 import { AuthCookies } from "./cookies";
 import { ApiEndpoints } from "./endpoints";
 
@@ -36,6 +44,24 @@ export async function loginAction(
   await AuthCookies.setTokens(body);
 
   return { message: "Logado com sucesso! Redirecionando...", success: true };
+}
+
+export async function createEmployee(
+  payload: CreateEmployeeDTO,
+): Promise<Employee | ApplicationException> {
+  const endpoint = "/usuarios";
+  const res = await apiClient(endpoint, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+  if (!(res instanceof Response)) {
+    return res;
+  }
+
+  const body: Employee = await res.json();
+
+  return body;
 }
 
 export async function logoutAction() {

@@ -90,7 +90,7 @@ export function LoginForm({
                   autoFocus
                   id="username"
                   type="text"
-                  placeholder="Seu nome"
+                  placeholder="Seu nome de usuário"
                   required
                   {...register("username")}
                 />

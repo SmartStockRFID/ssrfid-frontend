@@ -37,7 +37,7 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <body
         className={cn(
-          `${font.className} ${theme} min-h-svh flex flex-col antialiased`,
+          `${font.className} ${theme} min-h-svh flex flex-col antialiased bg-muted`,
         )}
       >
         <RootProvider>{children}</RootProvider>

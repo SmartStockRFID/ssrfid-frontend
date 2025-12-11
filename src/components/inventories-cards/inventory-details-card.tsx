@@ -3,7 +3,7 @@
 import { AlertCircleIcon, Loader, PackageSearch, Tag } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import {
-  type InventoryDetails,
+  type InventoryReading,
   type InventorySummary,
   RequestStatus,
 } from "@/types";
@@ -25,17 +25,16 @@ interface Props {
   className?: string;
   selectedInventory: InventorySummary | null;
   setSelectedInventory: (inventory: InventorySummary | null) => void;
-  inventoryDetails: InventoryDetails | null;
+  inventoryReadings: InventoryReading[] | null;
   hasInventories: boolean;
   fetchDetailsReqStatus: RequestStatus;
+  fetchedInventoryId: number;
 }
 
 export function InventoryDetailsCard(props: Props) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  const hasContent =
-    !!props?.inventoryDetails?.readings.length ||
-    !!props?.inventoryDetails?.events.length;
+  const hasContent = !!props?.inventoryReadings?.length;
 
   if (isDesktop) {
     return (
@@ -148,42 +147,40 @@ function InventoryDetailsContent(props: Omit<Props, "className">) {
               </AlertDescription>
             </Alert>
           )}
-          {props.selectedInventory.id === props.inventoryDetails?.id && (
-            <div className="space-y-2">
-              <Alert>
-                <Tag />
-                <AlertTitle>
-                  {props.inventoryDetails.readings.length === 0
-                    ? "Nenhum"
-                    : props.inventoryDetails.readings.length}{" "}
-                  produto{props.inventoryDetails.readings.length > 1 && "s"}{" "}
-                  lido{props.inventoryDetails.readings.length > 1 && "s"} no
-                  inventário
-                  <span
-                    className={cn(
-                      "max-sm:hidden",
-                      props.selectedInventory.status !== "iniciada" && "hidden",
-                    )}
-                  >
-                    {" "}
-                    até o momento
-                  </span>
-                  .
-                </AlertTitle>
-              </Alert>
-              {/* <Alert>
-                <Activity />
-                <AlertTitle>
-                  {props.inventoryDetails.events.length === 0 && "Nenhum"}
-                  {props.inventoryDetails.events.length > 0 &&
-                    props.inventoryDetails.events.length}{" "}
-                  evento{props.inventoryDetails.events.length > 1 && "s"}{" "}
-                  registrado{props.inventoryDetails.events.length > 1 && "s"} no
-                  inventário.
-                </AlertTitle>
-              </Alert> */}
-            </div>
-          )}
+          {props.selectedInventory.id === props.fetchedInventoryId &&
+            props.inventoryReadings !== null && (
+              <div className="space-y-2">
+                {props.inventoryReadings.length === 0 && (
+                  <Alert>
+                    <Tag />
+                    <AlertTitle>
+                      Nenhum produto lido no inventário
+                      <span
+                        className={cn(
+                          "max-sm:hidden",
+                          props.selectedInventory.status !== "iniciada" &&
+                            "hidden",
+                        )}
+                      >
+                        {" "}
+                        até o momento
+                      </span>
+                      .
+                    </AlertTitle>
+                  </Alert>
+                )}
+
+                {props.inventoryReadings.length > 0 &&
+                  props.inventoryReadings.map((read) => (
+                    <Alert key={read.id}>
+                      <Tag />
+                      <AlertTitle>
+                        {read.quantity} produtos {read.productCode} lidos
+                      </AlertTitle>
+                    </Alert>
+                  ))}
+              </div>
+            )}
         </div>
       )}
     </>

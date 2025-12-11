@@ -33,7 +33,7 @@ export function EmployeesCard({
                   </p>
                 </div>
                 <Button disabled variant="destructive">
-                  Remover Acesso
+                  Desativar Acesso
                 </Button>
               </li>
             ))}
