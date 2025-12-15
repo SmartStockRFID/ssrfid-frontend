@@ -16,8 +16,8 @@ const rubikFont = Rubik({
 });
 
 export const metadata: Metadata = {
-  title: "SSRFID Newland",
-  description: "Módulo de gestão do inventário ",
+  title: "SSRFID",
+  description: "Módulo de gestão do inventário",
   icons: [
     {
       rel: "icon",
