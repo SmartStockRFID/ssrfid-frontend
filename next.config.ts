@@ -7,6 +7,7 @@ console.debug(serverEnv);
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // output: 'standalone',  // Discomment to run production compose
   transpilePackages: ["@t3-oss/env-nextjs"],
   reactCompiler: true,
   typedRoutes: true,

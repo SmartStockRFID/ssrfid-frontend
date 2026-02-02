@@ -1,0 +1,17 @@
+services:
+  app:
+    container_name: ssrfid_local_next
+    build:
+      context: .
+      dockerfile: ./compose/local/next.Dockerfile
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    restart: always
+    volumes:
+      - .:/app
+      - ssrfid_node_modules:/app/node_modules
+
+volumes:
+  ssrfid_node_modules:
